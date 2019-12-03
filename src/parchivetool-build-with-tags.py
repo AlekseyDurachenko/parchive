@@ -38,11 +38,11 @@ JPG_QUALITY: int = 95
 
 
 def build_notags(input_xmp_files: List[str] = [], acceptable_rating: List[int] = [5]):
-    print("# PROC: BUILD NOTAGS")
+    print("# PROC: BUILD WITH TAGS")
     if not is_raw_folder():
         msg_raw_folder_flag_not_found()
     else:
-        output_dir = "processed-notags-%dx%d" % (MAX_WIDTH, MAX_HEIGHT,)
+        output_dir = "processed-with-tags-%dx%d" % (MAX_WIDTH, MAX_HEIGHT,)
         if not os.path.exists(output_dir):
             os.makedirs(output_dir, exist_ok=True)
             
@@ -79,6 +79,36 @@ def build_notags(input_xmp_files: List[str] = [], acceptable_rating: List[int] =
             code, _ = run_cmd(executable_exiftool(), [
                               "-overwrite_original",
                               "-all=",
+                              dst_jpg_file])
+            if code != 0:
+                continue
+            # copy metadata from the original jpeg file
+            # exiftool -overwrite_original -TagsFromFile ../${1%%.*}.${JPG_EXT}  "-all:all>all:all" ${DST_PATH}/${1%%.*}.${JPG_EXT}
+            # exiftool -overwrite_original -TagsFromFile ../${1%%.*}.${JPG_EXT}
+            #          -gps:all -model -make -lensmodel -iso -fnumber -exposuretime 
+            #          -apterture -focallength -datetimeoriginal -modifydate 
+            #          -creatdate ${DST_PATH}/${1%%.*}.${JPG_EXT}
+            code, _ = run_cmd(executable_exiftool(), [
+                              "-overwrite_original",
+                              "-TagsFromFile",
+                              jpg_file,
+                              "-gps:all",
+                              "-model",
+                              "-make",
+                              "-lensmodel",
+                              "-iso",
+                              "-fnumber",
+                              "-exposuretime",
+                              "-apterture",
+                              "-focallength",
+                              "-datetimeoriginal",
+                              "-modifydate",
+                              "-creatdate",
+                              "-by-line",
+                              "-Artist",
+                              "-CopyrightNotice",
+                              "-Copyright",
+                              "-XMP-cc:License",
                               dst_jpg_file])
             if code != 0:
                 continue

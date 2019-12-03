@@ -35,7 +35,7 @@ def rename(dry_run: bool, any_name: bool = False) -> None:
         msg_raw_folder_flag_not_found()
     else:
         # rename CANON files, template: IMG_NNNN.JPG
-        # rename OLYMPUS PEN files, template: PNNNNNNN.JPG
+        # rename OLYMPUS PEN files, template: PNNNNNNN.JPG , PCNNNNNN.JPG , PANNNNNN.JPG
         # rename PENTAX, template IMGPNNNN.JPG
         # rename OTHER, template DSCNNNNN.JPG
         # rename OTHER, template DSCFNNNN.JPG
@@ -45,7 +45,11 @@ def rename(dry_run: bool, any_name: bool = False) -> None:
             if any_name \
                     or re.match(r'IMG_\d\d\d\d\.JPG$', os.path.basename(jpg_file)) \
                     or re.match(r'P\d\d\d\d\d\d\d\.JPG$', os.path.basename(jpg_file)) \
+                    or re.match(r'PC\d\d\d\d\d\d\.JPG$', os.path.basename(jpg_file)) \
+                    or re.match(r'PA\d\d\d\d\d\d\.JPG$', os.path.basename(jpg_file)) \
+                    or re.match(r'PB\d\d\d\d\d\d\.JPG$', os.path.basename(jpg_file)) \
                     or re.match(r'DSC\d\d\d\d\d\.JPG$', os.path.basename(jpg_file)) \
+                    or re.match(r'DSCN\d\d\d\d\.JPG$', os.path.basename(jpg_file)) \
                     or re.match(r'DSCF\d\d\d\d\.JPG$', os.path.basename(jpg_file)) \
                     or re.match(r'DSC_\d\d\d\d\.JPG$', os.path.basename(jpg_file)) \
                     or re.match(r'IMGP\d\d\d\d\.JPG$', os.path.basename(jpg_file)):

@@ -39,7 +39,7 @@ def const_jpg_ext() -> str:
 
 
 def const_raw_exts() -> List[str]:
-    return ['cr2', 'orf', 'dng', 'pef', 'png']
+    return ['cr2', 'orf', 'dng', 'pef', 'png', 'nef', 'arw', 'rw2', 'tiff', 'jpg']
 
 
 if __name__ == "__main__":

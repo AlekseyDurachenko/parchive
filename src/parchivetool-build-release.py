@@ -35,7 +35,7 @@ from parchivetool_utils import find_jpg_for_xmp
 JPG_QUALITY: int = 95
 
 
-def build_release(acceptable_rating: List[int] = [5]):
+def build_release(input_xmp_files: List[str] = [], acceptable_rating: List[int] = [5]):
     print("# PROC: BUILD RELEASE")
     if not is_raw_folder():
         msg_raw_folder_flag_not_found()
@@ -43,7 +43,13 @@ def build_release(acceptable_rating: List[int] = [5]):
         output_dir = "processed-release"
         if not os.path.exists(output_dir):
             os.makedirs(output_dir, exist_ok=True)
-        for xmp_file in find_xmp_files('.'):
+
+        if input_xmp_files:
+            xmp_files = input_xmp_files
+        else:
+            xmp_files = find_xmp_files('.')
+
+        for xmp_file in xmp_files:
             raw_file = find_raw_for_xmp(xmp_file, ".")
             jpg_file = find_jpg_for_xmp(xmp_file, "..")
             if raw_file is None or jpg_file is None:
@@ -113,6 +119,7 @@ def build_release(acceptable_rating: List[int] = [5]):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--jpg-quality', type=int, help='set jpeg quality (default 95)')
+    parser.add_argument('files', type=str, nargs='*', help='files', default=[])
     args = parser.parse_args()
 
     if args.jpg_quality:
@@ -121,5 +128,8 @@ if __name__ == "__main__":
     if not check_executables():
         sys.exit(1)
     else:
-        build_release()
+        if args.files:
+            build_release(args.files)
+        else:
+            build_release()
         sys.exit(0)
